@@ -17,13 +17,13 @@ class ApiController extends AbstractController
     }
 
     #[Route('/test-api', name: 'test_api')]
-    public function test(): JsonResponse
+    public function test()
     {
-        $url = 'https://api.example.com/data';
+        $url = 'http://127.0.0.1:8000/api/offres/list';
         
         // GET avec query parameters
         $data = $this->apiClient->get($url, ['limit' => 5, 'type' => 'offre']);
 
-        return $this->json($data);
+        return $this->render('offres/index.html.twig', ['offres' => $data]);
     }
 }
