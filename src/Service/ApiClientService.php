@@ -48,4 +48,35 @@ class ApiClientService
             throw new \RuntimeException('Erreur API : ' . $e->getMessage());
         }
     }
+
+    /**
+     * Effectuer une requête PUT
+     */
+    public function put(string $url, array $data = []): array
+    {
+        try {
+            $response = $this->client->request('PUT', $url, [
+                'json' => $data,
+            ]);
+
+            return $response->toArray();
+        } catch (TransportExceptionInterface|ClientExceptionInterface|ServerExceptionInterface $e) {
+            throw new \RuntimeException('Erreur API : ' . $e->getMessage());
+        }
+    }
+
+    /**
+     * Effectuer une requête DELETE
+     */
+    public function delete(string $url): array
+    {
+        try {
+            $response = $this->client->request('DELETE', $url);
+
+            return $response->toArray();
+        } catch (TransportExceptionInterface|ClientExceptionInterface|ServerExceptionInterface $e) {
+            throw new \RuntimeException('Erreur API : ' . $e->getMessage());
+        }
+    }
+
 }

@@ -5,7 +5,10 @@ security:
 
     # https://symfony.com/doc/current/security.html#loading-the-user-the-user-provider
     providers:
-        users_in_memory: { memory: null }
+        # Notre provider custom : Symfony garde l'utilisateur en session
+        app_user_provider:
+            memory:
+                users: []
 
     firewalls:
         dev:
@@ -14,7 +17,12 @@ security:
             security: false
         main:
             lazy: true
-            provider: users_in_memory
+            provider: app_user_provider
+            custom_authenticator: App\Security\ApiAuthenticator
+            stateless: false
+            logout:
+                path: app_logout
+                target: app_home
 
             # Activate different ways to authenticate:
             # https://symfony.com/doc/current/security.html#the-firewall
@@ -24,8 +32,12 @@ security:
 
     # Note: Only the *first* matching rule is applied
     access_control:
-        # - { path: ^/admin, roles: ROLE_ADMIN }
-        # - { path: ^/profile, roles: ROLE_USER }
+        # Pages publiques
+        - { path: ^/login,    roles: PUBLIC_ACCESS }
+        - { path: ^/register, roles: PUBLIC_ACCESS }
+        - { path: ^/,        roles: PUBLIC_ACCESS }
+        # Tout le reste nécessite d'être connecté
+        # - { path: ^/,         roles: ROLE_USER }
 
 when@test:
     security:

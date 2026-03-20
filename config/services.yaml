@@ -21,3 +21,15 @@ services:
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
+
+    App\Service\OffreService:
+        arguments:
+            $apiBaseUrl: '%env(API_BASE_URL)%'
+
+    App\Security\ApiAuthenticator:
+        arguments:
+            $apiBaseUrl: '%env(API_BASE_URL)%'
+
+    App\Controller\RegisterController:
+        arguments:
+            $apiBaseUrl: '%env(API_BASE_URL)%'
