@@ -15,74 +15,55 @@ class OffreService
 
     /**
      * Récupère toutes les offres du recruteur connecté
+     * GET /api/recruteurs/offres
      */
-    public function getOffresRecruteur(int $recruteurId): array
+    public function getOffresRecruteur(): array
     {
-        return $this->apiClient->get(
-            $this->baseUrl . '/recruteur/' . $recruteurId . '/offres'
-        );
+        return $this->apiClient->get($this->baseUrl . '/recruteurs/offres');
     }
 
     /**
-     * Récupère une offre précise du recruteur
+     * Récupère une offre précise
+     * GET /api/offres/{id}
      */
-    public function getOffre(int $recruteurId, int $offreId): array
+    public function getOffre(int $offreId): array
     {
-        return $this->apiClient->get(
-            $this->baseUrl . '/recruteur/' . $recruteurId . '/offres/' . $offreId
-        );
+        return $this->apiClient->get($this->baseUrl . '/offres/' . $offreId);
+    }
+
+    /**
+     * Récupère toutes les offres publiques
+     * GET /api/offres
+     */
+    public function getAllOffres(): array
+    {
+        return $this->apiClient->get($this->baseUrl . '/offres');
     }
 
     /**
      * Crée une nouvelle offre
+     * POST /api/offres
      */
-    public function creerOffre(int $recruteurId, array $donnees): array
+    public function creerOffre(array $donnees): array
     {
-        return $this->apiClient->post(
-            $this->baseUrl . '/recruteur/' . $recruteurId . '/offre',
-            $donnees
-        );
+        return $this->apiClient->post($this->baseUrl . '/offres', $donnees);
     }
 
     /**
-     * Modifie une offre existante
+     * Modifie une offre
+     * PUT /api/offres/{id}
      */
-    public function modifierOffre(int $recruteurId, int $offreId, array $donnees): array
+    public function modifierOffre(int $offreId, array $donnees): array
     {
-        return $this->apiClient->put(
-            $this->baseUrl . '/recruteur/' . $recruteurId . '/offres/' . $offreId,
-            $donnees
-        );
+        return $this->apiClient->put($this->baseUrl . '/offres/' . $offreId, $donnees);
     }
 
     /**
      * Supprime une offre
+     * DELETE /api/offres/{id}
      */
-    public function supprimerOffre(int $recruteurId, int $offreId): array
+    public function supprimerOffre(int $offreId): array
     {
-        return $this->apiClient->delete(
-            $this->baseUrl . '/recruteur/' . $recruteurId . '/offres/' . $offreId
-        );
-    }
-
-    /**
-     * Récupère les candidatures d'une offre
-     */
-    public function getCandidatures(int $recruteurId, int $offreId): array
-    {
-        return $this->apiClient->get(
-            $this->baseUrl . '/recruteur/' . $recruteurId . '/offres/' . $offreId . '/postulations'
-        );
-    }
-
-    /**
-     * Change le statut d'une candidature (accepté / refusé)
-     */
-    public function updateStatutCandidature(int $recruteurId, int $offreId, int $postulationId, string $statut): array
-    {
-        return $this->apiClient->put(
-            $this->baseUrl . '/recruteur/' . $recruteurId . '/offres/' . $offreId . '/postulations/' . $postulationId,
-            ['statutPostulation' => $statut]
-        );
+        return $this->apiClient->delete($this->baseUrl . '/offres/' . $offreId);
     }
 }
