@@ -14,7 +14,7 @@
 
     <nav class="navbar navbar-expand-lg">
         <div class="container">
-            <a class="navbar-brand" href="{{ path('app_home') }}">
+            <a class="navbar-brand" href="{{ path('app_offre_index') }}">
                 Trouve<span>Ton</span>Job
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
@@ -25,7 +25,7 @@
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     {% if app.user %}
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ path('app_offre_index') }}">
+                            <a class="nav-link" href="{{ path('app_recruteur_offres') }}">
                                 <i class="bi bi-briefcase me-1"></i>Mes offres
                             </a>
                         </li>

@@ -8,7 +8,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-#[Route('/offres')]
+#[Route('')]
 class OffreController extends AbstractController
 {
     private OffreService $offreService;
@@ -18,7 +18,7 @@ class OffreController extends AbstractController
         $this->offreService = $offreService;
     }
 
-    #[Route('', name: 'app_offre_index')]
+    #[Route('/offres', name: 'app_offre_index')]
     public function index(): Response
     {
         $offres = $this->offreService->getAllOffres(); // ← changé
@@ -27,7 +27,22 @@ class OffreController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'app_offre_show', methods: ['GET'])]
+    #[Route('/recruteurs/offres', name: 'app_recruteur_offres')]
+    public function recruteurOffres(): Response
+    {
+        /** @var \App\Security\User $user */
+        $user = $this->getUser();
+        if (!$user) {
+            return $this->redirectToRoute('app_login');
+        }
+
+        $offres = $this->offreService->getOffresRecruteur();
+        return $this->render('offre/recruteur_offres.html.twig', [
+            'offres' => $offres,
+        ]);
+    }
+
+    #[Route('/offres/{id}', name: 'app_offre_show', methods: ['GET'])]
     public function show(int $id): Response
     {
         try {
@@ -42,7 +57,7 @@ class OffreController extends AbstractController
         ]);
     }
 
-    #[Route('/new', name: 'app_offre_new', methods: ['GET', 'POST'])]
+    #[Route('/offres/new', name: 'app_offre_new', methods: ['GET', 'POST'])]
     public function new(Request $request): Response
     {
         if ($request->isMethod('GET')) {
@@ -67,7 +82,7 @@ class OffreController extends AbstractController
         }
     }
 
-    #[Route('/{id}/edit', name: 'app_offre_edit', methods: ['GET', 'POST'])]
+    #[Route('/offres/{id}/edit', name: 'app_offre_edit', methods: ['GET', 'POST'])]
     public function edit(int $id, Request $request): Response
     {
         try {
@@ -100,7 +115,7 @@ class OffreController extends AbstractController
         }
     }
 
-    #[Route('/{id}/delete', name: 'app_offre_delete', methods: ['POST'])]
+    #[Route('/offres/{id}/delete', name: 'app_offre_delete', methods: ['POST'])]
     public function delete(int $id, Request $request): Response
     {
         if (!$this->isCsrfTokenValid('delete' . $id, $request->request->get('_token'))) {

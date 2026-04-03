@@ -6,6 +6,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
+use Exception;
 
 class SecurityController extends AbstractController
 {
@@ -14,7 +15,7 @@ class SecurityController extends AbstractController
     {
         // Si déjà connecté, on redirige directement
         if ($this->getUser()) {
-            return $this->redirectToRoute('app_offre_index');
+            return $this->redirectToRoute('app_recruteur_offres');
         }
 
         // Récupère l'erreur de connexion s'il y en a une

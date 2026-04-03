@@ -24,7 +24,7 @@ class RegisterController extends AbstractController
     {
         // Si déjà connecté, on redirige
         if ($this->getUser()) {
-            return $this->redirectToRoute('app_offre_index');
+            return $this->redirectToRoute('app_recruteur_offres');
         }
 
         // Affichage du formulaire

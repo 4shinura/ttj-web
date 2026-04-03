@@ -1,0 +1,93 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mes offres — TrouvetonJob{% endblock %}
+
+{% block body %}
+
+<div class="page-header">
+    <div class="container d-flex align-items-center justify-content-between">
+        <div>
+            <h1><i class="bi bi-briefcase me-2 text-primary"></i>Mes offres</h1>
+            <p class="text-muted mb-0 mt-1 small">
+                {{ offres|length }} offre{{ offres|length > 1 ? 's' : '' }} publiée{{ offres|length > 1 ? 's' : '' }}
+            </p>
+        </div>
+        <a href="{{ path('app_offre_new') }}" class="btn btn-primary">
+            <i class="bi bi-plus-lg me-2"></i>Nouvelle offre
+        </a>
+    </div>
+</div>
+
+<div class="container pb-5">
+
+    {% if offres is empty %}
+        <div class="text-center py-5 text-muted">
+            <i class="bi bi-briefcase-fill" style="font-size:3rem;color:#cbd5e1;display:block;margin-bottom:1rem;"></i>
+            <h5>Aucune offre publiée</h5>
+            <p class="mb-4">Commencez par créer votre première offre.</p>
+            <a href="{{ path('app_offre_new') }}" class="btn btn-primary">
+                <i class="bi bi-plus-lg me-2"></i>Créer une offre
+            </a>
+        </div>
+
+    {% else %}
+        <div class="row g-4">
+            {% for offre in offres %}
+                <div class="col-lg-6">
+                    <div class="card h-100 p-4">
+
+                        <div class="d-flex align-items-center justify-content-between mb-2">
+                            <div class="d-flex gap-2 flex-wrap">
+                                <span class="statut-badge badge-{{ offre.type|lower }}">
+                                    {{ offre.type }}
+                                </span>
+                                <span class="statut-badge badge-{{ offre.statut|lower == 'ouvert' ? 'ouvert' : 'ferme' }}">
+                                    {{ offre.statut }}
+                                </span>
+                            </div>
+                            <span class="small text-muted">
+                                <i class="bi bi-calendar3 me-1"></i>
+                                {{ offre.datePublication }}
+                            </span>
+                        </div>
+
+                        <h5 class="fw-bold mb-1">{{ offre.titre }}</h5>
+
+                        <p class="small text-muted mb-2">
+                            <i class="bi bi-calendar-x me-1"></i>
+                            Limite : {{ offre.dateLimite }}
+                        </p>
+
+                        <p class="text-muted small mb-3" style="display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;">
+                            {{ offre.description }}
+                        </p>
+
+                        <div class="d-flex align-items-center justify-content-between mt-auto">
+                            <a href="{{ path('app_offre_show', {id: offre.id}) }}" class="text-primary small">
+                                <i class="bi bi-people me-1"></i>Voir candidatures
+                            </a>
+
+                            <div class="d-flex gap-2">
+                                <a href="{{ path('app_offre_edit', {id: offre.id}) }}"
+                                   class="btn btn-outline-secondary btn-sm">
+                                    <i class="bi bi-pencil"></i>
+                                </a>
+                                <form method="post"
+                                      action="{{ path('app_offre_delete', {id: offre.id}) }}"
+                                      onsubmit="return confirm('Supprimer cette offre ?')">
+                                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ offre.id) }}">
+                                    <button type="submit" class="btn btn-outline-danger btn-sm">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+</div>
+{% endblock %}
