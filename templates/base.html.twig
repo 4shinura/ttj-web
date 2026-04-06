@@ -1,3 +1,5 @@
+{% set username = app.session.get('username') %}
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -33,10 +35,10 @@
                 </ul>
 
                 <div class="d-flex align-items-center gap-2">
-                    {% if app.user %}
+                    {% if username %}
                         <span class="text-white-50 small me-2">
                             <i class="bi bi-building me-1"></i>
-                            {{ app.user.nomUtilisateur }}
+                            {{ username }}
                         </span>
                         <a href="{{ path('app_logout') }}" class="btn btn-outline-light btn-sm">
                             <i class="bi bi-box-arrow-right me-1"></i>Déconnexion

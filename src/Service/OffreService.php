@@ -1,6 +1,7 @@
 <?php
-
 namespace App\Service;
+
+use Symfony\Component\HttpFoundation\Request;
 
 class OffreService
 {
@@ -17,9 +18,9 @@ class OffreService
      * Récupère toutes les offres du recruteur connecté
      * GET /api/recruteurs/offres
      */
-    public function getOffresRecruteur(): array
+    public function getOffresRecruteur(Request $request): array
     {
-        return $this->apiClient->get($this->baseUrl . '/recruteurs/offres');
+        return $this->apiClient->get($this->baseUrl . '/recruteurs/offres', [], AuthService::bearerHeaders($request));
     }
 
     /**

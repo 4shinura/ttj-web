@@ -16,7 +16,7 @@
         {% if error %}
             <div class="alert alert-danger py-2 px-3 small">
                 <i class="bi bi-exclamation-circle me-1"></i>
-                {{ error.messageKey|trans(error.messageData, 'security') }}
+                {{ error }}
             </div>
         {% endif %}
 
@@ -26,9 +26,8 @@
                 <div class="input-group">
                     <span class="input-group-text"><i class="bi bi-envelope"></i></span>
                     <input type="email"
-                           id="username"
-                           name="_username"
-                           value="{{ last_username }}"
+                           id="email"
+                           name="email"
                            class="form-control"
                            placeholder="votre@email.fr"
                            autocomplete="email"
@@ -42,15 +41,13 @@
                     <span class="input-group-text"><i class="bi bi-lock"></i></span>
                     <input type="password"
                            id="password"
-                           name="_password"
+                           name="password"
                            class="form-control"
                            placeholder="••••••••"
                            autocomplete="current-password"
                            required>
                 </div>
             </div>
-
-            {# TODO :  ajouter une case select pour choisir le type d'utilisateur #}
 
             <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
 

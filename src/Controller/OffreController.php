@@ -6,7 +6,8 @@ use App\Service\OffreService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
+use App\Service\AuthService;
 
 #[Route('')]
 class OffreController extends AbstractController
@@ -28,17 +29,15 @@ class OffreController extends AbstractController
     }
 
     #[Route('/recruteurs/offres', name: 'app_recruteur_offres')]
-    public function recruteurOffres(): Response
+    public function recruteurOffres(Request $request): Response
     {
-        /** @var \App\Security\User $user */
-        $user = $this->getUser();
-        if (!$user) {
+        if (!AuthService::isLoggedIn($request)) {
             return $this->redirectToRoute('app_login');
         }
 
-        $offres = $this->offreService->getOffresRecruteur();
+        $offres = $this->offreService->getOffresRecruteur($request);
         return $this->render('offre/recruteur_offres.html.twig', [
-            'offres' => $offres,
+            'offres' => $offres
         ]);
     }
 

@@ -19,11 +19,12 @@ class ApiClientService
     /**
      * Effectuer une requête GET
      */
-    public function get(string $url, array $query = []): array
+    public function get(string $url, array $query = [], array $headers = []): array
     {
         try {
             $response = $this->client->request('GET', $url, [
-                'query' => $query
+                'query' => $query,
+                'headers' => $headers,
             ]);
 
             return $response->toArray(); // convertit JSON en tableau PHP
@@ -42,6 +43,12 @@ class ApiClientService
             $response = $this->client->request('POST', $url, [
                 'json' => $data, // envoie les données au format JSON
             ]);
+
+            if ($response->getStatusCode() !== 200) {
+                return [
+                    'error' => 'Erreur API : ' . $response->getStatusCode()
+                ];
+            }
 
             return $response->toArray();
         } catch (TransportExceptionInterface|ClientExceptionInterface|ServerExceptionInterface $e) {

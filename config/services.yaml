@@ -27,7 +27,7 @@ services:
         arguments:
             $apiBaseUrl: '%api_base_url%'
 
-    App\Security\ApiAuthenticator:
+    App\Controller\SecurityController:
         arguments:
             $apiBaseUrl: '%api_base_url%'
 
