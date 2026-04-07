@@ -45,26 +45,26 @@ class OffreService
      * Crée une nouvelle offre
      * POST /api/offres
      */
-    public function creerOffre(array $donnees): array
+    public function creerOffre(Request $request, array $donnees): array
     {
-        return $this->apiClient->post($this->baseUrl . '/offres', $donnees);
+        return $this->apiClient->post($this->baseUrl . '/recruteurs/offres', $donnees, AuthService::bearerHeaders($request));
     }
 
     /**
      * Modifie une offre
      * PUT /api/offres/{id}
      */
-    public function modifierOffre(int $offreId, array $donnees): array
+    public function modifierOffre(Request $request, int $offreId, array $donnees): array
     {
-        return $this->apiClient->put($this->baseUrl . '/offres/' . $offreId, $donnees);
+        return $this->apiClient->put($this->baseUrl . '/recruteurs/offres/' . $offreId, $donnees, AuthService::bearerHeaders($request));
     }
 
     /**
      * Supprime une offre
      * DELETE /api/offres/{id}
      */
-    public function supprimerOffre(int $offreId): array
+    public function supprimerOffre(Request $request, int $offreId): array
     {
-        return $this->apiClient->delete($this->baseUrl . '/offres/' . $offreId);
+        return $this->apiClient->delete($this->baseUrl . '/recruteurs/offres/' . $offreId, [], AuthService::bearerHeaders($request));
     }
 }

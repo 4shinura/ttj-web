@@ -37,10 +37,11 @@ class ApiClientService
     /**
      * Effectuer une requête POST
      */
-    public function post(string $url, array $data = []): array
+    public function post(string $url, array $data = [], array $headers = []): array
     {
         try {
             $response = $this->client->request('POST', $url, [
+                'headers' => $headers,
                 'json' => $data, // envoie les données au format JSON
             ]);
 
@@ -59,11 +60,12 @@ class ApiClientService
     /**
      * Effectuer une requête PUT
      */
-    public function put(string $url, array $data = []): array
+    public function put(string $url, array $data = [], array $headers = []): array
     {
         try {
             $response = $this->client->request('PUT', $url, [
                 'json' => $data,
+                'headers' => $headers,
             ]);
 
             return $response->toArray();
@@ -75,10 +77,13 @@ class ApiClientService
     /**
      * Effectuer une requête DELETE
      */
-    public function delete(string $url): array
+    public function delete(string $url, array $data = [], array $headers = []): array
     {
         try {
-            $response = $this->client->request('DELETE', $url);
+            $response = $this->client->request('DELETE', $url, [
+                'json' => $data,
+                'headers' => $headers,
+            ]);
 
             return $response->toArray();
         } catch (TransportExceptionInterface|ClientExceptionInterface|ServerExceptionInterface $e) {

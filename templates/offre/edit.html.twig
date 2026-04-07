@@ -1,0 +1,121 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier l'offre — TrouvetonJob{% endblock %}
+
+{% block body %}
+
+<div class="page-header">
+    <div class="container">
+        <a href="{{ path('app_recruteur_offres') }}" class="btn btn-outline-secondary btn-sm mb-3">
+            <i class="bi bi-arrow-left me-1"></i>Retour à mes offres
+        </a>
+        <h1><i class="bi bi-pencil-square me-2 text-primary"></i>Modifier l'offre</h1>
+        <p class="text-muted mb-0 mt-1 small">Modifiez les informations de votre offre.</p>
+    </div>
+</div>
+
+<div class="container pb-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-7">
+
+            <div class="card p-4">
+                <form method="post" action="{{ path('app_offre_edit', {id: offre.id}) }}">
+
+                    {# Type d'offre #}
+                    <div class="mb-4">
+                        <label for="type_offre" class="form-label">
+                            <i class="bi bi-tag me-1 text-primary"></i>Type d'offre <span class="text-danger">*</span>
+                        </label>
+                        <select class="form-select" id="type_offre" name="type_offre" required>
+                            <option value="CDI"        {{ offre.type == 'CDI'        ? 'selected' }}>CDI</option>
+                            <option value="CDD"        {{ offre.type == 'CDD'        ? 'selected' }}>CDD</option>
+                            <option value="Stage"      {{ offre.type == 'Stage'      ? 'selected' }}>Stage</option>
+                            <option value="Alternance" {{ offre.type == 'Alternance' ? 'selected' }}>Alternance</option>
+                        </select>
+                    </div>
+
+                    {# Titre #}
+                    <div class="mb-4">
+                        <label for="titre_offre" class="form-label">
+                            <i class="bi bi-pencil me-1 text-primary"></i>Titre du poste <span class="text-danger">*</span>
+                        </label>
+                        <input type="text"
+                               class="form-control"
+                               id="titre_offre"
+                               name="titre_offre"
+                               value="{{ offre.titre }}"
+                               placeholder="Ex : Développeur web full-stack"
+                               required>
+                    </div>
+
+                    {# Description #}
+                    <div class="mb-4">
+                        <label for="description_offre" class="form-label">
+                            <i class="bi bi-file-text me-1 text-primary"></i>Description <span class="text-danger">*</span>
+                        </label>
+                        <textarea class="form-control"
+                                  id="description_offre"
+                                  name="description_offre"
+                                  rows="6"
+                                  placeholder="Décrivez le poste, les missions, le profil recherché..."
+                                  required>{{ offre.description }}</textarea>
+                    </div>
+
+                    {# Dates #}
+                    <div class="row g-3 mb-4">
+                        <div class="col-md-6">
+                            <label for="date_publication_offre" class="form-label">
+                                <i class="bi bi-calendar3 me-1 text-primary"></i>Date de publication <span class="text-danger">*</span>
+                            </label>
+                            <input type="date"
+                                   class="form-control"
+                                   id="date_publication_offre"
+                                   name="date_publication_offre"
+                                   value="{{ offre.datePublication }}"
+                                   required>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="date_limite_offre" class="form-label">
+                                <i class="bi bi-calendar-x me-1 text-primary"></i>Date limite <span class="text-danger">*</span>
+                            </label>
+                            <input type="date"
+                                   class="form-control"
+                                   id="date_limite_offre"
+                                   name="date_limite_offre"
+                                   value="{{ offre.dateLimite }}"
+                                   required>
+                        </div>
+                    </div>
+
+                    {# Actions #}
+                    <div class="d-flex justify-content-between align-items-center pt-2 border-top">
+
+                        {# Suppression #}
+                        <form method="post"
+                              action="{{ path('app_offre_delete', {id: offre.id}) }}"
+                              onsubmit="return confirm('Supprimer définitivement cette offre ?')">
+                            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ offre.id) }}">
+                            <button type="submit" class="btn btn-outline-danger btn-sm">
+                                <i class="bi bi-trash me-1"></i>Supprimer
+                            </button>
+                        </form>
+
+                        <div class="d-flex gap-2">
+                            <a href="{{ path('app_recruteur_offres') }}" class="btn btn-outline-secondary">
+                                Annuler
+                            </a>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="bi bi-check-lg me-2"></i>Enregistrer
+                            </button>
+                        </div>
+
+                    </div>
+
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+{% endblock %}
