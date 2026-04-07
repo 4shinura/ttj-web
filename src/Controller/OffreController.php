@@ -45,7 +45,7 @@ class OffreController extends AbstractController
     public function new(Request $request): Response
     {
         if ($request->isMethod('GET')) {
-            return $this->render('offre/recruteur_offres.html.twig');
+            return $this->render('offre/new.html.twig');
         }
 
         $donnees = [

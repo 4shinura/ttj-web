@@ -19,21 +19,43 @@
             <a class="navbar-brand" href="{{ path('app_offre_index') }}">
                 Trouve<span>Ton</span>Job
             </a>
+
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
                 <span class="navbar-toggler-icon"></span>
             </button>
 
             <div class="collapse navbar-collapse" id="navMenu">
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    {% if app.user %}
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ path('app_recruteur_offres') }}">
-                                <i class="bi bi-briefcase me-1"></i>Mes offres
-                            </a>
-                        </li>
-                    {% endif %}
+                
+                <!-- Logos centrés / navigation principale -->
+                <ul class="navbar-nav mx-auto mb-2 mb-lg-0 d-flex align-items-center gap-3">
+
+                    <!-- Voir les offres -->
+                    <li class="nav-item">
+                        <a class="nav-link text-center" href="{{ path('app_offre_index') }}">
+                            <i class="bi bi-search fs-5"></i><br>
+                            <small>Offres</small>
+                        </a>
+                    </li>
+
+                    <!-- Mes offres publiées -->
+                    <li class="nav-item">
+                        <a class="nav-link text-center" href="{{ path('app_recruteur_offres') }}">
+                            <i class="bi bi-briefcase fs-5"></i><br>
+                            <small>Mes offres</small>
+                        </a>
+                    </li>
+
+                    <!-- Messagerie -->
+                    <li class="nav-item">
+                        <a class="nav-link text-center" href="{{ path('app_offre_index') }}">
+                            <i class="bi bi-chat-dots fs-5"></i><br>
+                            <small>Messages</small>
+                        </a>
+                    </li>
+
                 </ul>
 
+                <!-- Partie droite -->
                 <div class="d-flex align-items-center gap-2">
                     {% if username %}
                         <span class="text-white-50 small me-2">
@@ -48,6 +70,7 @@
                         <a href="{{ path('app_register') }}" class="btn btn-primary btn-sm">S'inscrire</a>
                     {% endif %}
                 </div>
+
             </div>
         </div>
     </nav>

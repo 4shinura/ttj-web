@@ -23,6 +23,8 @@ class OffreService
         return $this->apiClient->get($this->baseUrl . '/recruteurs/offres', [], AuthService::bearerHeaders($request));
     }
 
+    
+
     /**
      * Récupère une offre précise
      * GET /api/offres/{id}
