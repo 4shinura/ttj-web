@@ -1,0 +1,89 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Messagerie — TrouvetonJob{% endblock %}
+
+{% block body %}
+
+<div class="page-header">
+    <div class="container d-flex align-items-center justify-content-between">
+        <div>
+            <h1><i class="bi bi-chat-dots me-2 text-primary"></i>Messagerie</h1>
+            <p class="text-muted mb-0 mt-1 small">
+                {{ correspondants|length }} conversation{{ correspondants|length > 1 ? 's' : '' }}
+            </p>
+        </div>
+        <a href="{{ path('message_new') }}" class="btn btn-primary">
+            <i class="bi bi-pencil-square me-1"></i>Nouveau message
+        </a>
+    </div>
+</div>
+
+<div class="container pb-5">
+
+    {% if correspondants is empty %}
+        <div class="text-center py-5 text-muted">
+            <i class="bi bi-chat-slash" style="font-size:3rem;color:#cbd5e1;display:block;margin-bottom:1rem;"></i>
+            <h5>Aucune conversation</h5>
+            <p class="mb-4">Commencez à échanger avec d'autres utilisateurs.</p>
+            <a href="{{ path('message_new') }}" class="btn btn-primary">
+                <i class="bi bi-pencil-square me-1"></i>Envoyer un premier message
+            </a>
+        </div>
+
+    {% else %}
+        <div class="row justify-content-center">
+            <div class="col-lg-7">
+                <div class="card p-0 overflow-hidden">
+                    {% for correspondant in correspondants %}
+                        <a href="{{ path('message_conversation', {correspondantId: correspondant.id}) }}"
+                           class="correspondant-row d-flex align-items-center gap-3 p-3 text-decoration-none"
+                           style="{{ not loop.last ? 'border-bottom: 1px solid var(--ttj-border);' : '' }}">
+
+                            <div class="avatar-circle">
+                                {{ correspondant.prenom|first|upper }}{{ correspondant.nom|first|upper }}
+                            </div>
+
+                            <div class="flex-grow-1 min-w-0">
+                                <div class="fw-semibold text-dark">
+                                    {{ correspondant.prenom }} {{ correspondant.nom }}
+                                </div>
+                                <div class="small text-muted text-truncate">
+                                    <i class="bi bi-envelope me-1"></i>{{ correspondant.email }}
+                                </div>
+                            </div>
+
+                            <i class="bi bi-chevron-right text-muted"></i>
+                        </a>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    {% endif %}
+
+</div>
+
+<style>
+.correspondant-row {
+    transition: background 0.15s;
+    color: inherit;
+}
+.correspondant-row:hover {
+    background: var(--ttj-light);
+}
+.avatar-circle {
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    background: var(--ttj-blue);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 0.9rem;
+    flex-shrink: 0;
+}
+</style>
+
+{% endblock %}

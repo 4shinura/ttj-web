@@ -1,0 +1,129 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Conversation avec {{ conversation.correspondant.prenom }} {{ conversation.correspondant.nom }} — TrouvetonJob{% endblock %}
+
+{% block body %}
+
+<div class="page-header">
+    <div class="container d-flex align-items-center justify-content-between">
+        <div class="d-flex align-items-center gap-3">
+            <a href="{{ path('message_index') }}" class="btn btn-outline-secondary btn-sm">
+                <i class="bi bi-arrow-left me-1"></i>Retour
+            </a>
+            <div class="avatar-circle-sm">
+                {{ conversation.correspondant.prenom|first|upper }}{{ conversation.correspondant.nom|first|upper }}
+            </div>
+            <div>
+                <h1 class="mb-0">{{ conversation.correspondant.prenom }} {{ conversation.correspondant.nom }}</h1>
+                <p class="text-muted mb-0 small">
+                    <i class="bi bi-envelope me-1"></i>{{ conversation.correspondant.email }}
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container pb-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+
+            {# Fil de messages #}
+            <div class="messages-feed mb-4">
+
+                {% if conversation.messages is empty %}
+                    <div class="text-center py-5 text-muted">
+                        <i class="bi bi-chat" style="font-size:2.5rem;color:#cbd5e1;display:block;margin-bottom:1rem;"></i>
+                        <p>Aucun message dans cette conversation. Soyez le premier à écrire !</p>
+                    </div>
+                {% else %}
+                    {% set currentUser = app.session.get('username') %}
+                    {% for message in conversation.messages %}
+                        {% set isMine = message.emetteur.prenom ~ ' ' ~ message.emetteur.nom == currentUser %}
+                        <div class="d-flex {{ isMine ? 'justify-content-end' : 'justify-content-start' }} mb-3">
+                            <div class="message-bubble {{ isMine ? 'bubble-mine' : 'bubble-other' }}">
+                                <div class="bubble-meta mb-1">
+                                    <span class="fw-semibold">{{ isMine ? 'Vous' : message.emetteur.prenom ~ ' ' ~ message.emetteur.nom }}</span>
+                                    <span class="text-muted small ms-2">{{ message.dateEnvoi }}</span>
+                                    <a href="{{ path(isMine ? 'message_sent_show' : 'message_received_show', {id: message.id}) }}"
+                                       class="ms-2 small link-secondary">
+                                        <i class="bi bi-eye"></i>
+                                    </a>
+                                </div>
+                                <div class="bubble-content">{{ message.contenu }}</div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+
+            </div>
+
+            {# Formulaire de réponse #}
+            <div class="card p-4">
+                <h6 class="fw-bold mb-3"><i class="bi bi-reply me-1 text-primary"></i>Répondre</h6>
+                <form action="{{ path('message_send', {destinataireId: conversation.correspondant.id}) }}" method="POST">
+                    <div class="mb-3">
+                        <textarea name="contenu" class="form-control" rows="4"
+                                  placeholder="Écrivez votre message…" required></textarea>
+                    </div>
+                    <div class="d-flex justify-content-end">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-send me-1"></i>Envoyer
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<style>
+.avatar-circle-sm {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--ttj-blue);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 0.85rem;
+    flex-shrink: 0;
+}
+.messages-feed {
+    display: flex;
+    flex-direction: column;
+}
+.message-bubble {
+    max-width: 70%;
+    padding: 0.75rem 1rem;
+    border-radius: 16px;
+    font-size: 0.95rem;
+}
+.bubble-mine {
+    background: var(--ttj-blue);
+    color: #fff;
+    border-bottom-right-radius: 4px;
+}
+.bubble-mine .bubble-meta { color: rgba(255,255,255,0.8); }
+.bubble-mine .text-muted   { color: rgba(255,255,255,0.65) !important; }
+.bubble-mine a.link-secondary { color: rgba(255,255,255,0.75) !important; }
+
+.bubble-other {
+    background: #fff;
+    border: 1px solid var(--ttj-border);
+    border-bottom-left-radius: 4px;
+    color: var(--ttj-dark);
+}
+.bubble-meta {
+    font-size: 0.8rem;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    margin-bottom: 0.25rem;
+}
+</style>
+
+{% endblock %}

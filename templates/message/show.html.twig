@@ -1,0 +1,109 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Message — TrouvetonJob{% endblock %}
+
+{% block body %}
+
+<div class="page-header">
+    <div class="container d-flex align-items-center gap-3">
+        <a href="{{ path('message_conversation', {correspondantId: isSent ? message.destinataire.id : message.emetteur.id}) }}"
+           class="btn btn-outline-secondary btn-sm">
+            <i class="bi bi-arrow-left me-1"></i>Retour à la conversation
+        </a>
+        <div>
+            <h1 class="mb-0">
+                {% if isSent %}
+                    <i class="bi bi-send me-2 text-primary"></i>Message envoyé
+                {% else %}
+                    <i class="bi bi-inbox me-2 text-primary"></i>Message reçu
+                {% endif %}
+            </h1>
+        </div>
+    </div>
+</div>
+
+<div class="container pb-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-7">
+
+            <div class="card p-4">
+
+                {# En-tête du message #}
+                <div class="d-flex align-items-center justify-content-between mb-4 pb-3"
+                     style="border-bottom: 1px solid var(--ttj-border);">
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="avatar-circle">
+                            {% if isSent %}
+                                {{ message.destinataire.prenom|first|upper }}{{ message.destinataire.nom|first|upper }}
+                            {% else %}
+                                {{ message.emetteur.prenom|first|upper }}{{ message.emetteur.nom|first|upper }}
+                            {% endif %}
+                        </div>
+                        <div>
+                            {% if isSent %}
+                                <div class="text-muted small">À</div>
+                                <div class="fw-semibold">{{ message.destinataire.prenom }} {{ message.destinataire.nom }}</div>
+                            {% else %}
+                                <div class="text-muted small">De</div>
+                                <div class="fw-semibold">{{ message.emetteur.prenom }} {{ message.emetteur.nom }}</div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="text-end">
+                        <span class="statut-badge {{ isSent ? 'badge-cdi' : 'badge-stage' }}">
+                            {{ isSent ? 'Envoyé' : 'Reçu' }}
+                        </span>
+                        <div class="small text-muted mt-1">
+                            <i class="bi bi-clock me-1"></i>{{ message.dateEnvoi }}
+                        </div>
+                    </div>
+                </div>
+
+                {# Corps du message #}
+                <div class="message-body p-3 rounded" style="background: var(--ttj-light); white-space: pre-wrap; line-height: 1.7;">
+                    {{ message.contenu }}
+                </div>
+
+                {# Actions #}
+                <div class="d-flex gap-2 mt-4">
+                    {% if isSent %}
+                        <a href="{{ path('message_conversation', {correspondantId: message.destinataire.id}) }}"
+                           class="btn btn-outline-primary btn-sm">
+                            <i class="bi bi-chat me-1"></i>Voir la conversation
+                        </a>
+                    {% else %}
+                        <a href="{{ path('message_conversation', {correspondantId: message.emetteur.id}) }}"
+                           class="btn btn-primary btn-sm">
+                            <i class="bi bi-reply me-1"></i>Répondre
+                        </a>
+                        <a href="{{ path('message_conversation', {correspondantId: message.emetteur.id}) }}"
+                           class="btn btn-outline-secondary btn-sm">
+                            <i class="bi bi-chat me-1"></i>Voir la conversation
+                        </a>
+                    {% endif %}
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<style>
+.avatar-circle {
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    background: var(--ttj-blue);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 0.9rem;
+    flex-shrink: 0;
+}
+</style>
+
+{% endblock %}
