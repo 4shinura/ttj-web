@@ -175,8 +175,8 @@ document.addEventListener('DOMContentLoaded', function () {
             return;
         }
         // On construit l'URL vers la route message_send avec l'id du destinataire
-        const baseUrl = "{{ path('message_send', {destinataireId: '__ID__'}) }}".replace('__ID__', hiddenId.value);
-        form.action = baseUrl;
+        const baseUrl = "{{ path('message_send', { destinataireId: 0 }) }}";
+        form.action = baseUrl.replace(/\/0$/, '/' + hiddenId.value);
         form.submit();
     });
 });

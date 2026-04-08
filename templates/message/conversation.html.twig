@@ -36,9 +36,8 @@
                         <p>Aucun message dans cette conversation. Soyez le premier à écrire !</p>
                     </div>
                 {% else %}
-                    {% set currentUser = app.session.get('username') %}
                     {% for message in conversation.messages %}
-                        {% set isMine = message.emetteur.prenom ~ ' ' ~ message.emetteur.nom == currentUser %}
+                        {% set isMine = message.destinataire.nom ~ message.destinataire.prenom == conversation.correspondant.nom ~ conversation.correspondant.prenom %}
                         <div class="d-flex {{ isMine ? 'justify-content-end' : 'justify-content-start' }} mb-3">
                             <div class="message-bubble {{ isMine ? 'bubble-mine' : 'bubble-other' }}">
                                 <div class="bubble-meta mb-1">
