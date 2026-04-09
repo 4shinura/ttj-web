@@ -10,21 +10,21 @@ class AuthService
     /** Vérifie qu'un token est présent dans les cookies */
     public static function isLoggedIn(Request $request): bool
     {
-        return $request->cookies->has('access_token');
+        return $request->cookies->has('access_token_ttj_web');
     }
 
     /** Construit le header Authorization: Bearer pour l'API */
     public static function bearerHeaders(Request $request): array
     {
         return [
-            'Authorization' => 'Bearer ' . $request->cookies->get('access_token'),
+            'Authorization' => 'Bearer ' . $request->cookies->get('access_token_ttj_web'),
         ];
     }
 
     /** Stocke le token JWT dans un cookie HttpOnly */
     public static function buildCookie(string $token): Cookie
     {
-        return Cookie::create('access_token')
+        return Cookie::create('access_token_ttj_web')
             ->withValue($token)
             ->withExpires(time() + 3600)
             ->withPath('/')
@@ -50,7 +50,7 @@ class AuthService
             return null;
         }
 
-        $token = $request->cookies->get('access_token');
+        $token = $request->cookies->get('access_token_ttj_web');
         $payload = self::jwt_decode($token);
 
         return $payload['user']['nom'] . ' ' . $payload['user']['prenom'] ?? null;
