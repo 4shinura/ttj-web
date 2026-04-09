@@ -1,0 +1,78 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Candidatures pour {{ offre.titre }} — TrouvetonJob{% endblock %}
+
+{% block body %}
+
+<div class="page-header">
+    <div class="container d-flex align-items-center justify-content-between">
+        <div>
+            <h1><i class="bi bi-people me-2 text-primary"></i>Candidatures pour "{{ offre.titre }}"</h1>
+            <p class="text-muted mb-0 mt-1 small">
+                {{ candidatures|length }} candidature{{ candidatures|length > 1 ? 's' : '' }}
+            </p>
+        </div>
+        <a href="{{ path('app_recruteur_offres') }}" class="btn btn-outline-primary">
+            <i class="bi bi-arrow-left me-2"></i>Retour aux offres
+        </a>
+    </div>
+</div>
+
+<div class="container pb-5">
+
+    {% if candidatures is empty %}
+        <div class="text-center py-5 text-muted">
+            <i class="bi bi-person-x" style="font-size:3rem;color:#cbd5e1;display:block;margin-bottom:1rem;"></i>
+            <h5>Aucune candidature</h5>
+            <p class="mb-4">Personne n'a encore postulé à cette offre.</p>
+        </div>
+
+    {% else %}
+        <div class="row g-4">
+            {% for candidature in candidatures %}
+                <div class="col-lg-12">
+                    <div class="card p-4">
+
+                        <div class="d-flex align-items-center justify-content-between mb-3">
+                            <div>
+                                <h5 class="mb-1">{{ candidature.candidat.prenom }} {{ candidature.candidat.nom }}</h5>
+                                <p class="text-muted small mb-0">{{ candidature.candidat.email }}</p>
+                            </div>
+                            <div class="d-flex align-items-center gap-2">
+                                <span class="badge bg-{{ candidature.statut == 'acceptée' ? 'success' : (candidature.statut == 'refusée' ? 'danger' : 'warning') }}">
+                                    {{ candidature.statut == 'acceptée' ? 'Acceptée' : (candidature.statut == 'refusée' ? 'Refusée' : 'En attente') }}
+                                </span>
+                                <small class="text-muted">
+                                    <i class="bi bi-calendar3 me-1"></i>
+                                    {{ candidature.date }}
+                                </small>
+                            </div>
+                        </div>
+
+                        <div class="d-flex gap-2 mt-3">
+                            {% if candidature.statut == 'pending' %}
+                                <form method="post" action="{{ path('app_candidature_update_statut', {candidatureId: candidature.id}) }}" class="d-inline">
+                                    <input type="hidden" name="statut" value="acceptée">
+                                    <input type="hidden" name="offre_id" value="{{ offre.id }}">
+                                    <button type="submit" class="btn btn-success btn-sm" onclick="return confirm('Accepter cette candidature ?')">
+                                        <i class="bi bi-check-lg me-1"></i>Accepter
+                                    </button>
+                                </form>
+                                <form method="post" action="{{ path('app_candidature_update_statut', {candidatureId: candidature.id}) }}" class="d-inline">
+                                    <input type="hidden" name="statut" value="refusée">
+                                    <input type="hidden" name="offre_id" value="{{ offre.id }}">
+                                    <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Refuser cette candidature ?')">
+                                        <i class="bi bi-x-lg me-1"></i>Refuser
+                                    </button>
+                                </form>
+                            {% endif %}
+                        </div>
+
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+</div>
+{% endblock %}

@@ -11,7 +11,7 @@ use Symfony\Contracts\HttpClient\Exception\HttpExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 use App\Service\ApiClientService;
 
-class SecurityController extends AbstractController
+class AuthController extends AbstractController
 {
     private string $baseUrl;
     private readonly ApiClientService $apiClientService;

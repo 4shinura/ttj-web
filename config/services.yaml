@@ -27,7 +27,11 @@ services:
         arguments:
             $apiBaseUrl: '%api_base_url%'
 
-    App\Controller\SecurityController:
+    App\Service\CandidatureService:
+        arguments:
+            $apiBaseUrl: '%api_base_url%'
+
+    App\Controller\AuthController:
         arguments:
             $apiBaseUrl: '%api_base_url%'
 

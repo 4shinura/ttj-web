@@ -8,15 +8,18 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use App\Service\AuthService;
+use App\Service\CandidatureService;
 
 #[Route('')]
 class OffreController extends AbstractController
 {
     private OffreService $offreService;
+    private CandidatureService $candidatureService;
 
-    public function __construct(OffreService $offreService)
+    public function __construct(OffreService $offreService, CandidatureService $candidatureService)
     {
         $this->offreService = $offreService;
+        $this->candidatureService = $candidatureService;
     }
 
     #[Route('/offres', name: 'app_offre_index')]
@@ -38,6 +41,22 @@ class OffreController extends AbstractController
         $offres = $this->offreService->getOffresRecruteur($request);
         return $this->render('offre/recruteur_offres.html.twig', [
             'offres' => $offres
+        ]);
+    }    
+
+    #[Route('/offres/{id}', name: 'app_offre_show_published', methods: ['GET'])]
+    public function showPublished(int $id): Response
+    {
+        try {
+            $offre = $this->offreService->getPublishedOffre($id);
+        } catch (\RuntimeException $e) {
+            $this->addFlash('error', 'Offre introuvable.');
+            return $this->redirectToRoute('app_offre_index');
+        }
+
+        return $this->render('offre/show.html.twig', [
+            'offre' => $offre,
+            'isRecruteurView' => false
         ]);
     }
 
@@ -67,11 +86,11 @@ class OffreController extends AbstractController
         }
     }
 
-    #[Route('/offres/{id}', name: 'app_offre_show', methods: ['GET'])]
-    public function show(int $id): Response
+    #[Route('/recruteurs/offres/{id}', name: 'app_offre_show', methods: ['GET'])]
+    public function show(Request $request, int $id): Response
     {
         try {
-            $offre = $this->offreService->getOffre($id);
+            $offre = $this->offreService->getRecruteurOffre($request, $id);
         } catch (\RuntimeException $e) {
             $this->addFlash('error', 'Offre introuvable.');
             return $this->redirectToRoute('app_recruteur_offres');
@@ -79,16 +98,15 @@ class OffreController extends AbstractController
 
         return $this->render('offre/show.html.twig', [
             'offre' => $offre,
+            'isRecruteurView' => true
         ]);
     }
-
-    
 
     #[Route('/offres/{id}/edit', name: 'app_offre_edit', methods: ['GET', 'POST'])]
     public function edit(int $id, Request $request): Response
     {
         try {
-            $offre = $this->offreService->getOffre($id);
+            $offre = $this->offreService->getRecruteurOffre($request, $id);
         } catch (\RuntimeException $e) {
             $this->addFlash('error', 'Offre introuvable.');
             return $this->redirectToRoute('app_recruteur_offres');
@@ -132,5 +150,51 @@ class OffreController extends AbstractController
         }
 
         return $this->redirectToRoute('app_recruteur_offres');
+    }
+
+    #[Route('/recruteurs/offres/{id}/candidatures', name: 'app_offre_candidatures', methods: ['GET'])]
+    public function candidatures(int $id, Request $request): Response
+    {
+        if (!AuthService::isLoggedIn($request)) {
+            return $this->redirectToRoute('app_login');
+        }
+
+        try {
+            $offre = $this->offreService->getRecruteurOffre($request, $id);
+            $candidatures = $this->candidatureService->getCandidaturesForOffre($request, $id);
+        } catch (\RuntimeException $e) {
+            $this->addFlash('error', 'Erreur lors de la récupération des données.');
+            return $this->redirectToRoute('app_recruteur_offres');
+        }
+
+        return $this->render('offre/candidatures.html.twig', [
+            'offre' => $offre,
+            'candidatures' => $candidatures,
+        ]);
+    }
+
+    #[Route('/recruteurs/candidatures/{candidatureId}/statut', name: 'app_candidature_update_statut', methods: ['POST'])]
+    public function updateCandidatureStatut(int $candidatureId, Request $request): Response
+    {
+        if (!AuthService::isLoggedIn($request)) {
+            return $this->redirectToRoute('app_login');
+        }
+
+        $statut = $request->request->get('statut');
+        $offreId = $request->request->get('offre_id');
+
+        if (!$statut || !$offreId) {
+            $this->addFlash('error', 'Données invalides.');
+            return $this->redirectToRoute('app_offre_candidatures', ['id' => $offreId]);
+        }
+
+        try {
+            $this->candidatureService->updateStatutCandidature($request, $candidatureId, $statut);
+            $this->addFlash('success', 'Statut mis à jour.');
+        } catch (\RuntimeException $e) {
+            $this->addFlash('error', 'Erreur lors de la mise à jour.');
+        }
+
+        return $this->redirectToRoute('app_offre_candidatures', ['id' => $offreId]);
     }
 }

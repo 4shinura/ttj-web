@@ -35,8 +35,8 @@
                                 <span class="statut-badge badge-{{ offre.type|lower }}">
                                     {{ offre.type }}
                                 </span>
-                                <span class="statut-badge badge-{{ offre.statut|lower == 'ouvert' ? 'ouvert' : 'ferme' }}">
-                                    {{ offre.statut }}
+                                <span class="statut-badge badge-{{ offre.statut|lower == 'published' ? 'published' : 'pending' }}">
+                                    {{ offre.statut == 'published' ? 'PUBLIÉE' : 'EN ATTENTE'}}
                                 </span>
                             </div>
                             <span class="small text-muted">
@@ -57,7 +57,7 @@
                         </p>
 
                         <div class="d-flex align-items-center justify-content-between mt-auto">
-                            <a href="{{ path('app_offre_show', {id: offre.id}) }}" class="btn btn-outline-primary btn-sm">
+                            <a href="{{ path('app_offre_show_published', {id: offre.id}) }}" class="btn btn-outline-primary btn-sm">
                                 <i class="bi bi-eye me-1"></i>Voir l'offre
                             </a>
                         </div>

@@ -29,9 +29,9 @@ class OffreService
      * Récupère une offre précise
      * GET /api/offres/{id}
      */
-    public function getOffre(int $offreId): array
+    public function getRecruteurOffre(Request $request, int $offreId): array
     {
-        return $this->apiClient->get($this->baseUrl . '/offres/' . $offreId);
+        return $this->apiClient->get($this->baseUrl . '/recruteurs/offres/' . $offreId, [], AuthService::bearerHeaders($request));
     }
 
     /**
@@ -41,6 +41,15 @@ class OffreService
     public function getAllOffres(): array
     {
         return $this->apiClient->get($this->baseUrl . '/offres');
+    }
+
+    /**
+     * Récupère une offre publiée
+     * GET /api/offres/{id}
+     */
+    public function getPublishedOffre(int $offreId): array
+    {
+        return $this->apiClient->get($this->baseUrl . '/offres/' . $offreId);
     }
 
     /**

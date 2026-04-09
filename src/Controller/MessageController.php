@@ -31,7 +31,7 @@ class MessageController extends AbstractController
         $result = $this->apiClientService->get($url, [], $headers);
 
         return $this->render('message/index.html.twig', [
-            'correspondants' => $result['data'] ?? [],
+            'correspondants' => $result ?? [],
         ]);
     }
 
