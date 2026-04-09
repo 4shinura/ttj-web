@@ -28,6 +28,27 @@
             &nbsp;·&nbsp;
             <i class="bi bi-calendar-x me-1"></i>Limite : {{ offre.dateLimite }}
         </p>
+        <br>
+        {% if offre.entreprise is defined and offre.entreprise %}
+            <div class="card border rounded-3 bg-white mb-3">
+                <div class="card-body p-3">
+                    <div class="d-flex align-items-start justify-content-between flex-wrap">
+                        <div>
+                            <h6 class="mb-1 text-uppercase text-secondary small">Entreprise : </h6>
+                            <p class="mb-1 fw-semibold">{{ offre.entreprise.raisonSociale }}</p>
+                            <p class="text-muted small mb-1">{{ offre.entreprise.adresse }}</p>
+                            <p class="text-muted small mb-0">Tél. {{ offre.entreprise.tel }}</p>
+                        </div>
+                        {% if offre.recruteur is defined and offre.recruteur %}
+                            <div class="text-end mt-2 mt-sm-0">
+                                <h6 class="mb-1 text-uppercase text-secondary small">Recruteur : </h6>
+                                <p class="mb-0 fw-semibold">{{ offre.recruteur.prenom }} {{ offre.recruteur.nom }}</p>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        {% endif %}
     </div>
 </div>
 

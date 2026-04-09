@@ -60,6 +60,12 @@
                             <a href="{{ path('app_offre_show_published', {id: offre.id}) }}" class="btn btn-outline-primary btn-sm">
                                 <i class="bi bi-eye me-1"></i>Voir l'offre
                             </a>
+                            {% if offre.entreprise is defined and offre.entreprise %}
+                                <div class="text-end text-muted small">
+                                    <div>Entreprise : </div>
+                                    <div class="fw-semibold">{{ offre.entreprise.raisonSociale }}</div>
+                                </div>
+                            {% endif %}
                         </div>
 
                     </div>
