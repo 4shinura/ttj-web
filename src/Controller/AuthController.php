@@ -74,7 +74,7 @@ class AuthController extends AbstractController
     {
         $request->getSession()->clear();
         $response = $this->redirectToRoute('app_login');
-        $response->headers->clearCookie('access_token', '/');
+        $response->headers->clearCookie('access_token_ttj_web', '/');
         return $response;
     }
 }
