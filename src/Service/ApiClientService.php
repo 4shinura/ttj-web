@@ -45,7 +45,7 @@ class ApiClientService
                 'json' => $data, // envoie les données au format JSON
             ]);
 
-            if ($response->getStatusCode() !== 200) {
+            if ($response->getStatusCode() < 200 || $response->getStatusCode() >= 300) {
                 return [
                     'error' => 'Erreur API : ' . $response->getStatusCode()
                 ];

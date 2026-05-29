@@ -1,0 +1,77 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Détail de la candidature — TrouvetonJob{% endblock %}
+
+{% block body %}
+<div class="page-header">
+    <div class="container d-flex justify-content-between align-items-center">
+        <div>
+            <h1><i class="bi bi-person-vcard me-2 text-primary"></i>{{ candidature.titre }}</h1>
+            <p class="text-muted mb-0 mt-1 small">Consultez le profil et proposez cette candidature à une offre publiée.</p>
+        </div>
+        <div class="d-flex gap-2">
+            <a href="{{ path('app_recruteur_candidatures') }}" class="btn btn-outline-primary">
+                <i class="bi bi-arrow-left me-2"></i>Retour
+            </a>
+            <a href="{{ path('app_recruteur_mes_propositions') }}" class="btn btn-outline-secondary">
+                <i class="bi bi-list-check me-2"></i>Mes propositions
+            </a>
+        </div>
+    </div>
+</div>
+
+<div class="container pb-5">
+    <div class="row g-4">
+        <div class="col-lg-7">
+            <div class="card p-4">
+                <div class="d-flex justify-content-between align-items-start mb-3">
+                    <div>
+                        <h4 class="mb-1">{{ candidature.titre }}</h4>
+                        <p class="text-muted mb-0 small">Candidature du {{ candidature.date }}</p>
+                    </div>
+                    <span class="badge bg-primary-subtle text-primary">{{ candidature.typePoste }}</span>
+                </div>
+
+                <p class="text-muted mb-3">{{ candidature.description }}</p>
+
+                <div class="d-flex flex-wrap gap-2 mb-4">
+                    <span class="badge bg-light text-dark border">Compétence: {{ candidature.competence }}</span>
+                    <span class="badge bg-light text-dark border">Type de poste: {{ candidature.typePoste }}</span>
+                    <span class="badge bg-light text-dark border">Statut candidature: {{ candidature.statut ? 'actif' : 'inactif' }}</span>
+                </div>
+
+                <div class="border-top pt-3">
+                    <h5 class="mb-3">Proposer cette candidature</h5>
+                    <form method="post" action="{{ path('app_recruteur_candidature_proposer', {id: candidature.id}) }}">
+                        <div class="mb-3">
+                            <label for="offre_id" class="form-label fw-semibold">Offre à proposer</label>
+                            <select class="form-select" id="offre_id" name="offre_id" required>
+                                <option value="" selected disabled>Sélectionner une offre publiée</option>
+                                {% for offre in offres %}
+                                    <option value="{{ offre.id }}">{{ offre.titre }} — {{ offre.type }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-send me-2"></i>Proposer
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-5">
+            <div class="card p-4">
+                <h5 class="mb-3"><i class="bi bi-info-circle me-2"></i>Informations utiles</h5>
+                <ul class="list-unstyled mb-0">
+                    <li class="mb-2"><strong>Titre :</strong> {{ candidature.titre }}</li>
+                    <li class="mb-2"><strong>Compétence :</strong> {{ candidature.competence }}</li>
+                    <li class="mb-2"><strong>Type de poste :</strong> {{ candidature.typePoste }}</li>
+                    <li class="mb-2"><strong>Date :</strong> {{ candidature.date }}</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
